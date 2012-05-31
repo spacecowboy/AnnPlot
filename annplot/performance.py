@@ -9,6 +9,7 @@ Variable importance
 
 
 '''
+from __future__ import division
 import matplotlib.pyplot as pl
 import numpy as np
 from sklearn.metrics import roc_curve, auc
@@ -91,6 +92,29 @@ def plot_roc(targets, outputs, labels=None):
 
     return fig
 
+def plot_feature_importance(names, feature_changes):
+    '''Gives a graph of the relative importance among features sorted by impact.
+    Expects the feature_changes to consist of the change in the error function
+    when that feature was removed in some way
+
+    With names being the names you want to print along with that feature.
+    '''
+
+    #Sort by most important and make relative to the biggest change
+    feature_changes = 100 * (feature_changes / feature_changes.max())
+    sorted_idx = np.argsort(feature_changes)
+
+    pos = np.arange(sorted_idx.shape[0]) + 0.5
+
+    fig = pl.figure()
+    ax = pl.subplot(111)
+
+    pl.barh(pos, feature_changes[sorted_idx], align='center')
+    pl.yticks(pos, names[sorted_idx])
+    pl.xlabel('Relative Importance')
+
+    return fig
+
 if __name__ == '__main__':
     from util import show, save
     ###ROC###
@@ -140,5 +164,34 @@ if __name__ == '__main__':
     plot_train_vs_test(alphas, np.array(train_errors), np.array(test_errors), "Alpha")
     save(plot_train_vs_test(alphas, np.array(train_errors), np.array(test_errors)), "perf.png")
 
+    ###FEATURE IMPORTANCE###
+    from sklearn import ensemble
+    from sklearn import datasets
+    from sklearn.utils import shuffle
+    from sklearn.metrics import mean_squared_error
+
+    ###############################################################################
+    # Load data
+    boston = datasets.load_boston()
+    X, y = shuffle(boston.data, boston.target, random_state=13)
+    X = X.astype(np.float32)
+    offset = int(X.shape[0] * 0.9)
+    X_train, y_train = X[:offset], y[:offset]
+    X_test, y_test = X[offset:], y[offset:]
+
+###############################################################################
+# Fit regression model
+    params = {'n_estimators': 500, 'max_depth': 4, 'min_samples_split': 1,
+              'learn_rate': 0.01, 'loss': 'ls'}
+    clf = ensemble.GradientBoostingRegressor(**params)
+
+    clf.fit(X_train, y_train)
+    mse = mean_squared_error(y_test, clf.predict(X_test))
+    print("MSE: %.4f" % mse)
+
+    ###PLOTIT###
+    plot_feature_importance(boston.feature_names, clf.feature_importances_)
+
     ###Show them###
     show()
+
