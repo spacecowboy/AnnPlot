@@ -3,7 +3,6 @@
 '''
 A collection of functions for plotting the output of classifiers and their decision boundaries.
 
-
 '''
 import matplotlib.pyplot as pl
 import numpy as np
@@ -62,7 +61,7 @@ if __name__ == "__main__":
 
     ##DATASETS##
     x, y = make_classification(n_features=2, n_redundant=0, n_informative=2,
-        n_clusters_per_class=1, n_classes=3)
+                               n_clusters_per_class=1, n_classes=3)
 
     plot_dataset(x, y, 30)
 
@@ -70,6 +69,5 @@ if __name__ == "__main__":
     rbf_svc = svm.SVC(kernel='rbf').fit(x, y)
 
     plot_boundaries(x, y, rbf_svc)
-
 
     show()
