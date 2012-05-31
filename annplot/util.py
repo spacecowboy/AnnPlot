@@ -5,8 +5,8 @@ Note that this should be imported first if the GTKAgg is to have any affect.
 If you don't want to use GTKAgg, set your own backend before importing this module (or the package)
 
 '''
-import matplotlib
-matplotlib.use('GTKAgg') #Only want to save images
+#import matplotlib
+#matplotlib.use('GTKAgg') #Only want to save images
 import matplotlib.pyplot as plt
 
 import sys
