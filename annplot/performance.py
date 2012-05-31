@@ -86,7 +86,7 @@ def plot_roc(targets, outputs, labels=None):
     pl.ylim([-0.03, 1.03])
     pl.xlabel('False Positive Rate')
     pl.ylabel('True Positive Rate')
-    pl.title('Receiver operating characteristic')
+    #pl.title('Receiver operating characteristic')
     pl.legend(loc="lower right")
 
     return fig
