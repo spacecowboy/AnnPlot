@@ -1,17 +1,21 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 '''
-A collection of functions for plotting the output of classifiers and their decision boundaries.
+A collection of functions for plotting the output of
+classifiers and their decision boundaries.
 
 '''
 import matplotlib.pyplot as pl
 import numpy as np
 
+
 def plot_dataset(x, y, s=20):
     '''Plots a two-dimensional dataset with one or several classes.
-    Class is assumed to be an integer value (needed for color) and of dimension (rows,)
+    Class is assumed to be an integer value (needed for color) and
+    of dimension (rows,)
     x is assumed to have dimension (rows, 2)
-    s (default 20) is desired size of the point. Accepts a scalar or an array of equal length as x and y
+    s (default 20) is desired size of the point. Accepts a scalar or
+    an array of equal length as x and y
     to scale each point individually.
     '''
     fig = pl.figure()
@@ -21,13 +25,15 @@ def plot_dataset(x, y, s=20):
 
     return fig
 
-def plot_boundaries(x, y, model, s=40):
+
+def plot_boundaries(x, targets, model, s=40):
     '''Plot the decision boundaries of a model for a two dimensional dataset.
     The model is expected to have a method with the signature:
         predict(x)
     x being of dimension (rows, 2) in this case.
 
-    y is assumed to contain integer values denoting the class (for colormapping purposes)
+    targets is assumed to contain integer values denoting the class
+    (for colormapping purposes)
 
     s is optional and denotes the size of the points
     '''
@@ -44,13 +50,13 @@ def plot_boundaries(x, y, model, s=40):
     Z = Z.reshape(xx.shape)
 
     #Color the background along the mesh
-    pl.contourf(xx, yy, Z, cmap=pl.cm.Paired)
+    ax.contourf(xx, yy, Z, cmap=pl.cm.Paired)
     #Color the outlines
-    pl.contour(xx, yy, Z, colors='k')
-    pl.axis('off')
+    ax.contour(xx, yy, Z, colors='k')
+    ax.axis('off')
 
     #Plot the individual points also
-    pl.scatter(x[:, 0], x[:, 1], c=y, s=s, cmap=pl.cm.Paired)
+    ax.scatter(x[:, 0], x[:, 1], c=targets, s=s, cmap=pl.cm.Paired)
 
     return fig
 
