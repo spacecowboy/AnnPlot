@@ -13,6 +13,7 @@ def plot_dataset(x, y, s=20):
     '''Plots a two-dimensional dataset with one or several classes.
     Class is assumed to be an integer value (needed for color) and
     of dimension (rows,)
+
     x is assumed to have dimension (rows, 2)
     s (default 20) is desired size of the point. Accepts a scalar or
     an array of equal length as x and y
@@ -75,5 +76,7 @@ if __name__ == "__main__":
     rbf_svc = svm.SVC(kernel='rbf').fit(x, y)
 
     plot_boundaries(x, y, rbf_svc)
+
+    print(rbf_svc.predict(x))
 
     show()

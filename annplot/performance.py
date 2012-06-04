@@ -14,6 +14,7 @@ import matplotlib.pyplot as pl
 import numpy as np
 from sklearn.metrics import roc_curve, auc
 
+
 def plot_train_vs_test(param, train_perf, test_perf,
                        xlabel="Regularization parameter"):
     '''Plot the performance on the test set and test set as a function of a
@@ -34,16 +35,18 @@ def plot_train_vs_test(param, train_perf, test_perf,
     ax.vlines(param[optimum], ax.get_ylim()[0], test_perf[optimum],
                         color='k', linewidth=3, label='Optimum on test')
     pl.legend(loc='best')
-    pl.ylim([ax.get_ylim()[0], 1.2*ax.get_ylim()[1]])
+    pl.ylim([ax.get_ylim()[0], 1.2 * ax.get_ylim()[1]])
     pl.xlabel(xlabel)
     pl.ylabel('Performance')
 
     return fig
 
+
 def plot_roc(targets, outputs, labels=None):
     '''Plot the ROC curve for several models.
     Optionally, use the keyword labels to
-    add labels for each model but make sure to specify one label for each model you have.
+    add labels for each model but make sure to specify one label
+    for each model you have.
 
     Examples:
     Y_true = [1,1,0,0]
@@ -65,14 +68,15 @@ def plot_roc(targets, outputs, labels=None):
     mean_fpr = np.linspace(0, 1, 100)
 
     fig = pl.figure()
-    ax = pl.subplot(1,1,1)
+    ax = pl.subplot(1, 1, 1)
 
     for output, label in zip(outputs, labels):
         fpr, tpr, thresholds = roc_curve(targets, output)
         mean_tpr += np.interp(mean_fpr, fpr, tpr)
         mean_tpr[0] = 0.0
         roc_auc = auc(fpr, tpr)
-        ax.plot(fpr, tpr, lw=1, label='{} (area = {:0.2f})'.format(label, roc_auc))
+        ax.plot(fpr, tpr, lw=1,
+                label='{} (area = {:0.2f})'.format(label, roc_auc))
 
     ax.plot([0, 1], [0, 1], '--', color=(0.6, 0.6, 0.6), label='Luck')
 
@@ -92,8 +96,10 @@ def plot_roc(targets, outputs, labels=None):
 
     return fig
 
+
 def plot_feature_importance(names, feature_changes):
-    '''Gives a graph of the relative importance among features sorted by impact.
+    '''Gives a graph of the relative importance among features sorted
+    by impact.
     Expects the feature_changes to consist of the change in the error function
     when that feature was removed in some way
 
@@ -109,7 +115,7 @@ def plot_feature_importance(names, feature_changes):
     fig = pl.figure()
     ax = pl.subplot(111)
 
-    pl.barh(pos, feature_changes[sorted_idx], align='center')
+    ax.barh(pos, feature_changes[sorted_idx], align='center')
     pl.yticks(pos, names[sorted_idx])
     pl.xlabel('Relative Importance')
 
@@ -118,7 +124,7 @@ def plot_feature_importance(names, feature_changes):
 if __name__ == '__main__':
     from util import show, save
     ###ROC###
-    Y_true = [1,1,0,0]
+    Y_true = [1, 1, 0, 0]
     pred1 = [0.9, 0.8, 0.6, 0.4]
     pred2 = [0.8, 0.3, 0.5, 0.4]
 
@@ -131,7 +137,7 @@ if __name__ == '__main__':
     ###TRAIN_VS_TEST###
     from sklearn import linear_model
 
-    ###############################################################################
+    ###########################################################################
     # Generate sample data
     n_samples_train, n_samples_test, n_features = 75, 150, 500
     #np.random.seed(0)
@@ -161,8 +167,10 @@ if __name__ == '__main__':
     print "Optimal regularization parameter : %s" % alpha_optim
 
     ###PLOTIT###
-    plot_train_vs_test(alphas, np.array(train_errors), np.array(test_errors), "Alpha")
-    save(plot_train_vs_test(alphas, np.array(train_errors), np.array(test_errors)), "perf.png")
+    plot_train_vs_test(alphas, np.array(train_errors),
+                       np.array(test_errors), "Alpha")
+    save(plot_train_vs_test(alphas, np.array(train_errors),
+                            np.array(test_errors)), "perf.png")
 
     ###FEATURE IMPORTANCE###
     from sklearn import ensemble
@@ -170,7 +178,7 @@ if __name__ == '__main__':
     from sklearn.utils import shuffle
     from sklearn.metrics import mean_squared_error
 
-    ###############################################################################
+    ###########################################################################
     # Load data
     boston = datasets.load_boston()
     X, y = shuffle(boston.data, boston.target, random_state=13)
@@ -194,4 +202,3 @@ if __name__ == '__main__':
 
     ###Show them###
     show()
-
